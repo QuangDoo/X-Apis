@@ -1,10 +1,13 @@
 import express from 'express'
 import databaseService from '~/services/database.services'
 import usersRouter from '~/routes/users.routes'
+import cors from 'cors'
 
 const app = express()
 
 const port = 4000
+
+app.use(cors())
 // parse application/json sang object
 app.use(express.json())
 
