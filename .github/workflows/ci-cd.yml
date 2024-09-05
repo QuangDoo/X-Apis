@@ -1,0 +1,53 @@
+name: CI/CD for Node.js App with Docker
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 'node'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run tests
+        run: npm test
+
+      - name: Build Docker image
+        run: docker build -t x-factor/x-factor-be:${{ github.sha }} .
+
+      - name: Log in to DockerHub
+        run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+
+      - name: Push Docker image
+        run: docker push x-factor/x-factor-be:${{ github.sha }}
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Pull Docker image
+        run: docker pull ${{ secrets.DOCKER_USERNAME }}/x-factor-be:${{ github.sha }}
+
+      - name: Run Docker container
+        run: |
+          docker stop x-factor-be || true
+          docker rm x-factor-be || true
+          docker run -d --name x-factor-be -p 80:4000 ${{ secrets.DOCKER_USERNAME }}/x-factor-be:${{ github.sha }}

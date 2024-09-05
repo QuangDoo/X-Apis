@@ -1,29 +1,23 @@
-# Use the official Node.js image.
-FROM node:current-alpine
+# Use an official Node.js runtime as a parent image
+FROM node:lastest
 
-# Install pnpm globally
-RUN npm install -g pnpm
+# Set the working directory inside the container
+WORKDIR /usr/src/app
 
-# Set the working directory
-WORKDIR /app
+# Copy the package.json and package-lock.json (if available)
+COPY package*.json ./
 
-# Copy package.json and pnpm-lock.yaml
-COPY package.json pnpm-lock.yaml ./
+# Install dependencies
+RUN npm install --production
 
-# Install dependencies using pnpm
-RUN pnpm install
-
-# Copy the rest of the application code
+# Copy the rest of the application files to the working directory
 COPY . .
 
-# Copy the .env file into the container
-COPY .env .env
+# Expose the port that the application will run on (e.g., 4000)
+EXPOSE 4000
 
-# Build the Next.js app
-RUN pnpm run build
+# Set environment variable for the port (optional, depends on how your app is configured)
+ENV PORT 4000
 
-# Expose the port the app runs on
-EXPOSE 3000
-
-# Start the Next.js app
-CMD ["pnpm", "start"]
+# Start the Node.js application
+CMD [ "npm", "start" ]
