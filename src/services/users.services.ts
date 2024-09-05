@@ -9,9 +9,17 @@ class UsersServices {
   private signAccessToken(userId: string) {
     return signToken({
       payload: { userId, token_type: TokenType.AccessToken },
-      options: { expiresIn: '5m', algorithm: 'HS256' }
+      options: { expiresIn: process.env.ACCESS_TOKEN_EXPIRES_IN, algorithm: 'HS256' }
     })
   }
+
+  private signRefreshToken(userId: string) {
+    return signToken({
+      payload: { userId, token_type: TokenType.RefreshToken },
+      options: { expiresIn: process.env.REFRESH_TOKEN_EXPIRES_IN, algorithm: 'HS256' }
+    })
+  }
+
   async register(payload: RegisterRequestBody) {
     try {
       const result = await databaseService.users.insertOne(
@@ -22,7 +30,17 @@ class UsersServices {
         })
       )
 
-      return result
+      const user_id = result.insertedId.toString()
+
+      const [access_token, refresh_token] = await Promise.all([
+        this.signAccessToken(user_id),
+        this.signRefreshToken(user_id)
+      ])
+
+      return {
+        access_token,
+        refresh_token
+      }
     } catch (error) {
       throw error
     }
