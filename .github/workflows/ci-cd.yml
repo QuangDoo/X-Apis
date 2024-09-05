@@ -51,4 +51,4 @@ jobs:
           docker pull ${{ secrets.DOCKER_USERNAME }}/x-factor-be:${{ github.sha }} && \
           docker stop x-factor-be || true && \
           docker rm x-factor-be || true && \
-          docker run -d --name x-factor-be -p 80:4000 ${{ secrets.DOCKER_USERNAME }}/x-factor-be:${{ github.sha }}"
+          docker run -d --name x-factor-be -p 8080:4000 ${{ secrets.DOCKER_USERNAME }}/x-factor-be:${{ github.sha }}"
