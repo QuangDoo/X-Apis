@@ -46,11 +46,14 @@ jobs:
 
       # Kết nối tới VPS và triển khai ứng dụng
       - name: Deploy to VPS
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
         run: |
-          sshpass -p ${{ secrets.VPS_PASSWORD }} ssh -o StrictHostKeyChecking=no root@${{ secrets.VPS_IP }} << 'EOF'
-            docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-            docker pull ${{ secrets.DOCKER_USERNAME }}/my-new-nodejs-app:latest
+          sshpass -p ${{ secrets.VPS_PASSWORD }} ssh -o StrictHostKeyChecking=no root@${{ secrets.VPS_IP }} << EOF
+            echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+            docker pull $DOCKER_USERNAME/my-new-nodejs-app:latest
             docker stop nodejs-app || true
             docker rm nodejs-app || true
-            docker run --env-file .env -d --name nodejs-app -p 80:4000 ${{ secrets.DOCKER_USERNAME }}/my-new-nodejs-app:latest
+            docker run --env-file .env -d --name nodejs-app -p 80:4000 $DOCKER_USERNAME/my-new-nodejs-app:latest
           EOF
