@@ -40,7 +40,7 @@ jobs:
         run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
 
       - name: Pull Docker image
-        run: docker pull ${{ secrets.DOCKER_USERNAME }}/diploma-verification:${{ github.sha }}
+        run: docker pull ${{ secrets.DOCKER_USERNAME }}/x-factor-be:${{ github.sha }}
 
       - name: Deploy to production
         env:
@@ -48,7 +48,7 @@ jobs:
         run: |
           sshpass -p "$VPS_PASSWORD" ssh -o StrictHostKeyChecking=no ${{ secrets.VPS_USERNAME }}@${{ secrets.VPS_IP }} \
           "docker login -u '${{ secrets.DOCKER_USERNAME }}' -p '${{ secrets.DOCKER_PASSWORD }}' && \
-          docker pull ${{ secrets.DOCKER_USERNAME }}/diploma-verification:${{ github.sha }} && \
-          docker stop diploma-verification-production || true && \
-          docker rm diploma-verification-production || true && \
-          docker run -d --name diploma-verification-production -p 3000:3000 ${{ secrets.DOCKER_USERNAME }}/diploma-verification:${{ github.sha }}"
+          docker pull ${{ secrets.DOCKER_USERNAME }}/x-factor-be:${{ github.sha }} && \
+          docker stop x-factor-be || true && \
+          docker rm x-factor-be || true && \
+          docker run -d --name x-factor-be -p 3000:3000 ${{ secrets.DOCKER_USERNAME }}/x-factor-be:${{ github.sha }}"
