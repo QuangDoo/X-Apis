@@ -51,6 +51,12 @@ class UsersServices {
 
     return !!result
   }
+
+  async getAllUsers() {
+    const result = await databaseService.users.find({}).toArray()
+
+    return result
+  }
 }
 
 export const usersServices = new UsersServices()

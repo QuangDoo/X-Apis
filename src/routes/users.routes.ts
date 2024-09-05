@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import { loginController, registerController } from '~/controllers/users.controllers'
+import { getAllUsersController, loginController, registerController } from '~/controllers/users.controllers'
 import { loginValidator, registerValidator } from '~/middlewares/users.middleware'
 import { wrapAsync } from '~/utils/handlers'
 
@@ -15,5 +15,10 @@ usersRouter.post('/login', loginValidator, loginController)
  * @author QuangDoo
  */
 usersRouter.post('/register', registerValidator, wrapAsync(registerController))
+
+/**
+ * @description Get all users
+ */
+usersRouter.get('/get-all-users', wrapAsync(getAllUsersController))
 
 export default usersRouter

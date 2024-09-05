@@ -28,3 +28,15 @@ export const registerController = async (
     next(error)
   }
 }
+
+export const getAllUsersController = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const result = await usersServices.getAllUsers()
+
+    return res.status(200).json({
+      data: result
+    })
+  } catch (error) {
+    next(error)
+  }
+}
