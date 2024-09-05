@@ -40,11 +40,17 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Pull Docker image
-        run: docker pull ${{ secrets.DOCKER_USERNAME }}/x-factor-be:${{ github.sha }}
+      # Cài đặt sshpass để sử dụng SSH với mật khẩu
+      - name: Install sshpass
+        run: sudo apt-get install sshpass
 
-      - name: Run Docker container
+      # Kết nối tới VPS và triển khai ứng dụng
+      - name: Deploy to VPS
         run: |
-          docker stop x-factor-be || true
-          docker rm x-factor-be || true
-          docker run -d --name x-factor-be -p 80:4000 ${{ secrets.DOCKER_USERNAME }}/x-factor-be:${{ github.sha }}
+          sshpass -p ${{ secrets.VPS_PASSWORD }} ssh -o StrictHostKeyChecking=no root@${{ secrets.VPS_IP }} << 'EOF'
+            docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+            docker pull ${{ secrets.DOCKER_USERNAME }}/my-new-nodejs-app:latest
+            docker stop nodejs-app || true
+            docker rm nodejs-app || true
+            docker run --env-file .env -d --name nodejs-app -p 80:4000 ${{ secrets.DOCKER_USERNAME }}/my-new-nodejs-app:latest
+          EOF
