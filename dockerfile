@@ -13,6 +13,9 @@ RUN npm install
 # Sao chép toàn bộ mã nguồn vào container
 COPY . .
 
+# Copy the .env file into the container
+COPY .env .env
+
 # Chạy lệnh build (nếu bạn đang sử dụng TypeScript)
 RUN npm run build
 
