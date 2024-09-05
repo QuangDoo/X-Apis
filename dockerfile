@@ -1,23 +1,23 @@
-# Use an official Node.js runtime as a parent image
-FROM node:latest
+# Sử dụng Node.js image chính thức
+FROM node:18
 
-# Set the working directory inside the container
+# Thiết lập thư mục làm việc trong container
 WORKDIR /usr/src/app
 
-# Copy the package.json and package-lock.json (if available)
+# Sao chép package.json và package-lock.json
 COPY package*.json ./
 
-# Install dependencies
-RUN npm install --production
+# Cài đặt các dependencies
+RUN npm install
 
-# Copy the rest of the application files to the working directory
+# Sao chép toàn bộ mã nguồn vào container
 COPY . .
 
-# Expose the port that the application will run on (e.g., 4000)
+# Chạy lệnh build (nếu bạn đang sử dụng TypeScript)
+RUN npm run build
+
+# Mở cổng ứng dụng (nếu cần)
 EXPOSE 4000
 
-# Set environment variable for the port (optional, depends on how your app is configured)
-ENV PORT 4000
-
-# Start the Node.js application
-CMD [ "npm", "start" ]
+# Khởi động ứng dụng
+CMD ["npm", "start"]
