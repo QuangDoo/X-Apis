@@ -22,6 +22,9 @@ jobs:
       - name: Install dependencies
         run: npm install
 
+      - name: Inject environment variables
+        run: echo "${{ secrets.ENV_FILE }}" > .env
+
       - name: Build Docker image
         run: docker build -t ${{ secrets.DOCKER_USERNAME }}/x-factor-be:${{ github.sha }} .
 
