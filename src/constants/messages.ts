@@ -9,7 +9,7 @@ export const USER_MESSAGES = {
   INVALID_FORGOT_PASSWORD_TOKEN: 'Invalid forgot password token',
   INVALID_USER: 'Invalid user',
   INVALID_REFRESH_TOKEN: 'Invalid refresh token',
-  INVALID_LOGIN: 'Invalid login',
+  INVALID_LOGIN: 'Invalid username or password',
   INVALID_TOKEN: 'Invalid token',
   INVALID_VERIFY_EMAIL: 'Invalid verify email',
   INVALID_RESET_PASSWORD: 'Invalid reset password',
@@ -20,5 +20,8 @@ export const USER_MESSAGES = {
   INVALID_USER_NAME: 'Name must be between 2 and 100 characters',
   USER_NOT_EXISTS: 'User not exists',
   INVALID_PASSWORD:
-    'Password must be at least 6 characters long and contain at least one lowercase letter, one uppercase letter, one number, and one special character.'
+    'Password must be at least 6 characters long and contain at least one lowercase letter, one uppercase letter, one number, and one special character.',
+  PASSWORD_NOT_EMPTY: 'Password is not empty',
+  LOGIN_SUCCESS: 'Login success',
+  REGISTER_SUCCESS: 'Register success'
 } as const

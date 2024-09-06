@@ -1,9 +1,12 @@
-import { User } from '~/models/schemas/User.schema'
-import databaseService from './database.services'
+import { TokenType } from '~/constants/enum'
 import { RegisterRequestBody } from '~/models/requests/User.requests'
+import { User } from '~/models/schemas/User.schema'
 import { hashPassword } from '~/utils/crypto'
 import { signToken } from '~/utils/jwt'
-import { TokenType } from '~/constants/enum'
+import databaseService from './database.services'
+import { ErrorWithStatus } from '~/models/Error'
+import { USER_MESSAGES } from '~/constants/messages'
+import { HTTP_STATUS_CODE } from '~/constants/httpStatus'
 
 class UsersServices {
   private signAccessToken(userId: string) {
@@ -20,6 +23,10 @@ class UsersServices {
     })
   }
 
+  private signAccessTAndRefreshToken(userId: string) {
+    return Promise.all([this.signAccessToken(userId), this.signRefreshToken(userId)])
+  }
+
   async register(payload: RegisterRequestBody) {
     try {
       const result = await databaseService.users.insertOne(
@@ -32,10 +39,7 @@ class UsersServices {
 
       const user_id = result.insertedId.toString()
 
-      const [access_token, refresh_token] = await Promise.all([
-        this.signAccessToken(user_id),
-        this.signRefreshToken(user_id)
-      ])
+      const [access_token, refresh_token] = await this.signAccessTAndRefreshToken(user_id)
 
       return {
         access_token,
@@ -50,6 +54,16 @@ class UsersServices {
     const result = await databaseService.users.findOne({ email })
 
     return !!result
+  }
+
+  async login(userId: string) {
+    if (!userId) {
+      throw new Error(USER_MESSAGES.USER_NOT_EXISTS)
+    }
+
+    const [access_token, refresh_token] = await this.signAccessTAndRefreshToken(userId)
+
+    return { access_token, refresh_token }
   }
 
   async getAllUsers() {
