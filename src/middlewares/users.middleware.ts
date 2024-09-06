@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from 'express'
 import { checkSchema } from 'express-validator'
+import { USER_MESSAGES } from '~/constants/messages'
 import { ErrorWithStatus } from '~/models/Error'
 import { usersServices } from '~/services/users.services'
 import { validate } from '~/utils/validation'
@@ -19,22 +20,32 @@ export const loginValidator = (req: Request, res: Response, next: NextFunction) 
 export const registerValidator = validate(
   checkSchema({
     name: {
-      notEmpty: true,
-      isString: true,
+      notEmpty: {
+        errorMessage: 'Tên không được để trống!' // Thông báo lỗi tùy chỉnh
+      },
+      isNumeric: false,
+      isString: {
+        errorMessage: 'Phải là chuỗi'
+      },
       isLength: {
         options: { min: 2, max: 100 },
-        errorMessage: 'Name must be between 2 and 100 characters'
+        errorMessage: USER_MESSAGES.INVALID_USER_NAME
       },
-      trim: true
+      trim: true,
+      custom: {
+        options: async (value: string) => {
+          if (!value.trim()) {
+            throw new Error('Tên không được để trống!')
+          }
+        }
+      }
     },
     email: {
-      notEmpty: true,
-
-      isLength: {
-        options: { min: 1, max: 100 }
+      notEmpty: {
+        errorMessage: 'Email không được để trống!'
       },
       isEmail: {
-        errorMessage: 'Must be a valid e-mail address'
+        errorMessage: USER_MESSAGES.INVALID_EMAIL
       },
       trim: true,
       custom: {
@@ -42,7 +53,7 @@ export const registerValidator = validate(
           const isEmailExisted = await usersServices.checkEmailExists(value)
 
           if (isEmailExisted) {
-            throw new ErrorWithStatus({ message: 'Email already exists', status: 401 })
+            throw new ErrorWithStatus({ message: USER_MESSAGES.EMAIL_EXISTS, status: 401 })
           }
 
           return true
@@ -50,7 +61,9 @@ export const registerValidator = validate(
       }
     },
     password: {
-      notEmpty: true,
+      notEmpty: {
+        errorMessage: 'Mật khẩu không được để trống!'
+      },
       isString: true,
       trim: true,
       isStrongPassword: {
@@ -61,12 +74,13 @@ export const registerValidator = validate(
           minSymbols: 1,
           minUppercase: 1
         },
-        errorMessage:
-          'Password must be at least 6 characters long and contain at least one lowercase letter, one uppercase letter, one number, and one special character.'
+        errorMessage: USER_MESSAGES.INVALID_PASSWORD
       }
     },
     confirm_password: {
-      notEmpty: true,
+      notEmpty: {
+        errorMessage: 'Xác nhận mật khẩu không được để trống!'
+      },
       isString: true,
       trim: true,
       isStrongPassword: {
@@ -77,13 +91,12 @@ export const registerValidator = validate(
           minSymbols: 1,
           minUppercase: 1
         },
-        errorMessage:
-          'Password must be at least 6 characters long and contain at least one lowercase letter, one uppercase letter, one number, and one special character.'
+        errorMessage: USER_MESSAGES.INVALID_PASSWORD
       },
       custom: {
         options: (value: string, { req }) => {
           if (value !== req.body.password) {
-            throw new Error("Passwords don't match")
+            throw new Error('Mật khẩu xác nhận không khớp!')
           }
           return true
         }
@@ -91,7 +104,8 @@ export const registerValidator = validate(
     },
     date_of_birth: {
       isISO8601: {
-        options: { strict: true, strictSeparator: true }
+        options: { strict: true, strictSeparator: true },
+        errorMessage: 'Ngày sinh không hợp lệ!'
       }
     }
   })
