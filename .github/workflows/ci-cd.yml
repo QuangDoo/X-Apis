@@ -34,13 +34,6 @@ jobs:
       - name: Push Docker image
         run: docker push ${{ secrets.DOCKER_USERNAME }}/x-factor-be:${{ github.sha }}
 
-      - name: Send webhook on success
-        if: success() # Chỉ thực hiện nếu build thành công
-        run: |
-          curl -X POST https://axolo-webhook-url.com \
-          -H "Content-Type: application/json" \
-          -d '{"text": "Build successful for commit ${{ github.sha }}", "channel": "your-slack-channel", "email": "your-email@example.com"}'
-
   deploy:
     runs-on: ubuntu-latest
     needs: build
