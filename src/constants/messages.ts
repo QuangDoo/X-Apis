@@ -1,6 +1,24 @@
 export const USER_MESSAGES = {
   USER_NOT_FOUND: 'User not found',
-  INVALID_PASSWORD: 'Invalid password',
+  USERNAME_NOT_EMPTY: 'User name is not empty',
   INVALID_EMAIL: 'Invalid email',
-  INVALID_FIELD: 'Validation error'
+  INVALID_FIELD: 'Validation error',
+  USER_EXISTS: 'User already exists',
+  EMAIL_EXISTS: 'Email already exists',
+  INVALID_VERIFY_TOKEN: 'Invalid verify token',
+  INVALID_FORGOT_PASSWORD_TOKEN: 'Invalid forgot password token',
+  INVALID_USER: 'Invalid user',
+  INVALID_REFRESH_TOKEN: 'Invalid refresh token',
+  INVALID_LOGIN: 'Invalid login',
+  INVALID_TOKEN: 'Invalid token',
+  INVALID_VERIFY_EMAIL: 'Invalid verify email',
+  INVALID_RESET_PASSWORD: 'Invalid reset password',
+  INVALID_USER_VERIFY_STATUS: 'Invalid user verify status',
+  INVALID_USER_BIO: 'Invalid user bio',
+  INVALID_USER_LOCATION: 'Invalid user location',
+  INVALID_USER_WEBSITE: 'Invalid user website',
+  INVALID_USER_NAME: 'Name must be between 2 and 100 characters',
+  USER_NOT_EXISTS: 'User not exists',
+  INVALID_PASSWORD:
+    'Password must be at least 6 characters long and contain at least one lowercase letter, one uppercase letter, one number, and one special character.'
 } as const
