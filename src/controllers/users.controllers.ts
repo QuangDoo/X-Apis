@@ -15,8 +15,6 @@ export const registerController = async (
   next: NextFunction
 ) => {
   try {
-    throw new Error('test')
-
     const result = await usersServices.register(req.body)
 
     return res.status(200).json({
