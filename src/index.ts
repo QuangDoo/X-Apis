@@ -1,7 +1,10 @@
-import express from 'express'
+import express, { NextFunction, Request, Response } from 'express'
 import databaseService from '~/services/database.services'
 import usersRouter from '~/routes/users.routes'
 import cors from 'cors'
+import { defaultErrorHandler } from './middlewares/error.middleware'
+
+databaseService.connect()
 
 const app = express()
 
@@ -13,16 +16,8 @@ app.use(express.json())
 
 app.use('/users', usersRouter)
 
-databaseService.connect()
-
-//@ts-ignore
-app.use((error, req, res, next) => {
-  console.error('Error: ', error)
-  res.status(500).json({
-    message: error.message
-  })
-})
+app.use(defaultErrorHandler)
 
 app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`)
+  console.log(`App listening on port ${port}`)
 })
