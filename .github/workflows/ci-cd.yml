@@ -37,6 +37,7 @@ jobs:
       - name: Push Docker image
         run: docker push ${{ secrets.DOCKER_USERNAME }}/x-factor-be:${{ github.sha }}
 
+  jobs:
   sonarqube:
     runs-on: ubuntu-latest
     steps:
@@ -47,7 +48,12 @@ jobs:
         uses: actions/setup-java@v2
         with:
           java-version: '11'
-          distribution: 'adopt' # or 'openjdk' or 'oracle'
+
+      - name: Install SonarScanner
+        run: |
+          curl -sSLo sonar-scanner.zip https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.6.2.2472-linux.zip
+          unzip sonar-scanner.zip
+          export PATH="$PATH:$(pwd)/sonar-scanner-4.6.2.2472-linux/bin"
 
       - name: Install dependencies
         run: npm install
@@ -61,17 +67,3 @@ jobs:
           -Dsonar.sources=. \
           -Dsonar.host.url=https://sonarcloud.io \
           -Dsonar.login=${{ secrets.SONAR_TOKEN }}
-
-  deploy:
-    runs-on: ubuntu-latest
-    needs: [build, sonarqube] # Đảm bảo cả build và sonarqube đều thành công
-    if: github.ref == 'refs/heads/main'
-    steps:
-      - name: Install sshpass
-        run: sudo apt-get update && sudo apt-get install -y sshpass
-
-      - name: Docker login
-        run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
-
-      - name: Pull Docker image
-        run: docker pull ${{ secrets.DOCKER_USERNAME }}/
