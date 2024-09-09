@@ -1,4 +1,4 @@
-name: CI/CD for Node.js App with Docker
+name: CI/CD for X-apis
 
 on:
   push:
