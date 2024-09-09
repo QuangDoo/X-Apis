@@ -9,7 +9,6 @@ import { validate } from '~/utils/validation'
 export const checkRegisterUserExists = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { email } = req.body
-
     // Check if the user exists based on the email only
     const user = await databaseService.users.findOne({ email })
 
