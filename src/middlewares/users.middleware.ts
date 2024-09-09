@@ -29,7 +29,6 @@ export const checkLoginUserExists = async (req: Request, res: Response, next: Ne
   try {
     const { email, password } = req.body
     const hashedPassword = hashPassword(password)
-
     // Truy vấn database để kiểm tra email và mật khẩu
     const user = await databaseService.users.findOne({
       email,
