@@ -21,7 +21,11 @@ export const USER_MESSAGES = {
   USER_NOT_EXISTS: 'User not exists',
   INVALID_PASSWORD:
     'Password must be at least 6 characters long and contain at least one lowercase letter, one uppercase letter, one number, and one special character.',
+  PASSWORD_NOT_MATCH: 'Password not match',
   PASSWORD_NOT_EMPTY: 'Password is not empty',
+  CONFIRM_PASSWORD_NOT_EMPTY: 'Password confirm is not empty',
+  EMAIL_NOT_EMPTY: 'Email is not empty',
+  INVALID_DATE_OF_BIRTH: "Date of birth must be in ISO format 'YYYY-MM-DD'",
   LOGIN_SUCCESS: 'Login success',
   REGISTER_SUCCESS: 'Register success'
 } as const

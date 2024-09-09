@@ -1,11 +1,22 @@
 import { Router } from 'express'
 import { getAllUsersController, loginController, registerController } from '~/controllers/users.controllers'
-import { loginValidator, registerValidator } from '~/middlewares/users.middleware'
+import {
+  checkLoginUserExists,
+  checkRegisterUserExists,
+  loginValidator,
+  registerValidator
+} from '~/middlewares/users.middleware'
 import { wrapRequestHanlder } from '~/utils/handlers'
 
 const usersRouter = Router()
-
-usersRouter.post('/login', loginValidator, loginController)
+/**
+ * @description Login user
+ * @path /users/login
+ * @method POST
+ * @body {email: string, password: string}
+ * @author QuangDoo
+ */
+usersRouter.post('/login', checkLoginUserExists, loginValidator, loginController)
 
 /**
  * @description Register a new user
@@ -14,7 +25,7 @@ usersRouter.post('/login', loginValidator, loginController)
  * @body {name: string, email: string, password: string, confirm_password: string, date_of_birth: ISOString}
  * @author QuangDoo
  */
-usersRouter.post('/register', registerValidator, wrapRequestHanlder(registerController))
+usersRouter.post('/register', checkRegisterUserExists, registerValidator, wrapRequestHanlder(registerController))
 
 /**
  * @description Get all users
