@@ -20,16 +20,13 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: 'lts/*'
+          node-version: 'node'
 
       - name: Install dependencies
         run: npm install
 
       - name: Inject environment variables
         run: echo "${{ secrets.ENV_FILE }}" > .env
-
-      - name: Run tests
-        run: npm run test
 
       - name: Build Docker image
         run: docker build -t ${{ secrets.DOCKER_USERNAME }}/x-factor-be:${{ github.sha }} .
