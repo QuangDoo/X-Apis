@@ -1,12 +1,12 @@
-import express, { NextFunction, Request, Response } from 'express'
-import databaseService from '~/services/database.services'
-import usersRouter from '~/routes/users.routes'
 import cors from 'cors'
+import express from 'express'
+import usersRouter from '~/routes/users.routes'
+import databaseService from '~/services/database.services'
 import { defaultErrorHandler } from './middlewares/error.middleware'
 
 databaseService.connect()
 
-const app = express()
+export const app = express()
 
 const port = 4000
 
