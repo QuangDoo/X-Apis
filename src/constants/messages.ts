@@ -27,5 +27,8 @@ export const USER_MESSAGES = {
   EMAIL_NOT_EMPTY: 'Email is not empty',
   INVALID_DATE_OF_BIRTH: "Date of birth must be in ISO format 'YYYY-MM-DD'",
   LOGIN_SUCCESS: 'Login success',
-  REGISTER_SUCCESS: 'Register success'
+  REGISTER_SUCCESS: 'Register success',
+  ACCESS_TOKEN_NOT_EMPTY: 'Access token is not empty',
+  REFRESH_TOKEN_NOT_EMPTY: 'Refresh token is not empty',
+  LOGOUT_SUCCESS: 'Logout success'
 } as const

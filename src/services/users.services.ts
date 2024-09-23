@@ -1,12 +1,10 @@
 import { TokenType } from '~/constants/enum'
+import { USER_MESSAGES } from '~/constants/messages'
 import { RegisterRequestBody } from '~/models/requests/User.requests'
 import { User } from '~/models/schemas/User.schema'
 import { hashPassword } from '~/utils/crypto'
 import { signToken } from '~/utils/jwt'
 import databaseService from './database.services'
-import { ErrorWithStatus } from '~/models/Error'
-import { USER_MESSAGES } from '~/constants/messages'
-import { HTTP_STATUS_CODE } from '~/constants/httpStatus'
 
 class UsersServices {
   private signAccessToken(userId: string) {

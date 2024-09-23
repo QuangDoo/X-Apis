@@ -1,6 +1,12 @@
 import { Router } from 'express'
-import { getAllUsersController, loginController, registerController } from '~/controllers/users.controllers'
 import {
+  getAllUsersController,
+  loginController,
+  logoutController,
+  registerController
+} from '~/controllers/users.controllers'
+import {
+  accessTokenValidator,
   checkLoginUserExists,
   checkRegisterUserExists,
   loginValidator,
@@ -9,6 +15,16 @@ import {
 import { wrapRequestHanlder } from '~/utils/handlers'
 
 const usersRouter = Router()
+
+/**
+ * @description Register a new user
+ * @path /users/register
+ * @method POST
+ * @body {name: string, email: string, password: string, confirm_password: string, date_of_birth: ISOString}
+ * @author QuangDoo
+ */
+usersRouter.post('/register', checkRegisterUserExists, registerValidator, wrapRequestHanlder(registerController))
+
 /**
  * @description Login user
  * @path /users/login
@@ -19,13 +35,15 @@ const usersRouter = Router()
 usersRouter.post('/login', checkLoginUserExists, loginValidator, loginController)
 
 /**
- * @description Register a new user
- * @path /users/register
- * @method POST
- * @body {name: string, email: string, password: string, confirm_password: string, date_of_birth: ISOString}
+ * @description Logout user
+ * @path /users/logout
+ * @method Post
+ * @header {Authorization: Bearer <access_token>}
+ * @body {refresh_token: string}
  * @author QuangDoo
  */
-usersRouter.post('/register', checkRegisterUserExists, registerValidator, wrapRequestHanlder(registerController))
+
+usersRouter.post('/logout', accessTokenValidator, wrapRequestHanlder(logoutController))
 
 /**
  * @description Get all users
