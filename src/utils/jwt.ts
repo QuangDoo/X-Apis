@@ -12,9 +12,9 @@ export const signToken = ({
   return new Promise((resovle, reject) => {
     return jwt.sign(payload, privateKey, options, (err, token) => {
       if (err) {
-        throw reject(err)
+        reject(err)
       } else {
-        return resovle(token)
+        resovle(token)
       }
     })
   })
