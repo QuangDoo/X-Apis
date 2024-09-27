@@ -1,12 +1,6 @@
 import { Router } from 'express'
+import { getAllUsersController, loginController, registerController } from '~/controllers/users.controllers'
 import {
-  getAllUsersController,
-  loginController,
-  logoutController,
-  registerController
-} from '~/controllers/users.controllers'
-import {
-  accessTokenValidator,
   checkLoginUserExists,
   checkRegisterUserExists,
   loginValidator,
@@ -43,7 +37,7 @@ usersRouter.post('/login', checkLoginUserExists, loginValidator, loginController
  * @author QuangDoo
  */
 
-usersRouter.post('/logout', accessTokenValidator, wrapRequestHanlder(logoutController))
+// usersRouter.post('/logout', accessTokenValidator, wrapRequestHanlder(logoutController))
 
 /**
  * @description Get all users

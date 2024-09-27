@@ -21,12 +21,12 @@ export const signToken = ({
 }
 
 export const verifyToken = (token: string) => {
-  return new Promise((resovle, reject) => {
+  return new Promise((resolve, reject) => {
     return jwt.verify(token, process.env.JWT_SECRET as string, (err, decoded) => {
       if (err) {
         throw reject(err)
       } else {
-        return resovle(decoded)
+        return resolve(decoded)
       }
     })
   })
