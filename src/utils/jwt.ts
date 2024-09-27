@@ -24,9 +24,9 @@ export const verifyToken = (token: string) => {
   return new Promise((resolve, reject) => {
     return jwt.verify(token, process.env.JWT_SECRET as string, (err, decoded) => {
       if (err) {
-        throw reject(err)
+        reject(err)
       } else {
-        return resolve(decoded)
+        resolve(decoded)
       }
     })
   })
