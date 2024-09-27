@@ -70,15 +70,15 @@ export const loginController = async (req: Request, res: Response, next: NextFun
  * @author QuangDoo
  * @response {message: string}
  */
-export const logoutController = async (req: Request, res: Response, next: NextFunction) => {
-  try {
-    res.json({
-      message: USER_MESSAGES.LOGOUT_SUCCESS
-    })
-  } catch (error) {
-    next(error)
-  }
-}
+// export const logoutController = async (req: Request, res: Response, next: NextFunction) => {
+//   try {
+//     res.json({
+//       message: USER_MESSAGES.LOGOUT_SUCCESS
+//     })
+//   } catch (error) {
+//     next(error)
+//   }
+// }
 
 export const getAllUsersController = async (req: Request, res: Response, next: NextFunction) => {
   try {
